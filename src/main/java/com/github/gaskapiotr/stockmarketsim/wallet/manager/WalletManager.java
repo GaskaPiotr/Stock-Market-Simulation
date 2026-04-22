@@ -5,4 +5,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class WalletManager implements WalletExternalAPI {
+    public void sellStock(String wallet_id, String stock_name) {
+        // TODO add logic
+    }
 }
