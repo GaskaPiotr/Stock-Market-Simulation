@@ -21,4 +21,9 @@ public class GatewayManager {
         }
         // TODO return HTTP response
     }
+
+    @PostMapping("/stocks")
+    public void addStocks(@RequestBody List<BankStockDTO> stocks) {
+        // TODO add method body
+    }
 }
