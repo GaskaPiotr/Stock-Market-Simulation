@@ -2,9 +2,12 @@ package com.github.gaskapiotr.stockmarketsim.bank.manager;
 
 import com.github.gaskapiotr.stockmarketsim.bank.BankExternalAPI;
 import com.github.gaskapiotr.stockmarketsim.bank.BankStockDTO;
+import com.github.gaskapiotr.stockmarketsim.bank.entity.BankStock;
+import com.github.gaskapiotr.stockmarketsim.bank.mapper.BankMapper;
 import com.github.gaskapiotr.stockmarketsim.bank.repository.BankRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -12,9 +15,14 @@ import java.util.List;
 @RequiredArgsConstructor
 public class BankManager implements BankExternalAPI {
     private final BankRepository bankRepository;
+    private final BankMapper bankMapper;
 
+    @Transactional
     @Override
     public void addStocks(List<BankStockDTO> stocks) {
-        // TODO change dto to entity then add to repo
+        List<BankStock> bankStocks = stocks.stream()
+                .map(bankMapper::toEntity)
+                .toList();
+        bankRepository.saveAll(bankStocks);
     }
 }
