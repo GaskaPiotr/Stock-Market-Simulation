@@ -8,4 +8,5 @@ import org.mapstruct.MappingConstants;
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
 public interface BankMapper {
     BankStock toEntity(BankStockDTO dto);
+    BankStockDTO toDto(BankStock entity);
 }
