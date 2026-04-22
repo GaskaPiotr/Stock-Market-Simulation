@@ -1,7 +1,7 @@
 package com.github.gaskapiotr.stockmarketsim.bank.manager;
 
 import com.github.gaskapiotr.stockmarketsim.bank.BankExternalAPI;
-import com.github.gaskapiotr.stockmarketsim.bank.BankStockDTO;
+import com.github.gaskapiotr.stockmarketsim.bank.StocksDTO;
 import com.github.gaskapiotr.stockmarketsim.bank.entity.BankStock;
 import com.github.gaskapiotr.stockmarketsim.bank.mapper.BankMapper;
 import com.github.gaskapiotr.stockmarketsim.bank.repository.BankRepository;
@@ -18,16 +18,17 @@ public class BankManager implements BankExternalAPI {
     private final BankMapper bankMapper;
 
     @Override
-    public List<BankStockDTO> getAllStocks() {
-        return bankRepository.findAll().stream()
+    public StocksDTO getAllStocks() {
+        return new StocksDTO(bankRepository.findAll().stream()
                 .map(bankMapper::toDto)
-                .toList();
+                .toList());
     }
 
+    // TODO change to setStocks?
     @Transactional
     @Override
-    public void addStocks(List<BankStockDTO> stocks) {
-        List<BankStock> bankStocks = stocks.stream()
+    public void addStocks(StocksDTO stocksDTO) {
+        List<BankStock> bankStocks = stocksDTO.stocks().stream()
                 .map(bankMapper::toEntity)
                 .toList();
         bankRepository.saveAll(bankStocks);
