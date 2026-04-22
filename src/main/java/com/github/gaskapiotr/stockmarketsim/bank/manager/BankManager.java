@@ -17,6 +17,12 @@ public class BankManager implements BankExternalAPI {
     private final BankRepository bankRepository;
     private final BankMapper bankMapper;
 
+    @Override
+    public List<BankStockDTO> getAllStocks() {
+        return bankRepository.findAll().stream()
+                .map(bankMapper::toDto);
+    }
+
     @Transactional
     @Override
     public void addStocks(List<BankStockDTO> stocks) {
