@@ -5,10 +5,7 @@ import com.github.gaskapiotr.stockmarketsim.bank.BankStockDTO;
 import com.github.gaskapiotr.stockmarketsim.gateway.request.TradeRequest;
 import com.github.gaskapiotr.stockmarketsim.gateway.request.TradeType;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -28,6 +25,11 @@ public class GatewayManager {
             // TODO user sells then bank buys
         }
         // TODO return HTTP response
+    }
+
+    @GetMapping("/stocks")
+    public List<BankStockDTO> getAllStocks() {
+        return bankExternalAPI.getAllStocks();
     }
 
     @PostMapping("/stocks")
