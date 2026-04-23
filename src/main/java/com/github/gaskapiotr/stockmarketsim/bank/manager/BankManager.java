@@ -1,6 +1,7 @@
 package com.github.gaskapiotr.stockmarketsim.bank.manager;
 
 import com.github.gaskapiotr.stockmarketsim.bank.BankExternalAPI;
+import com.github.gaskapiotr.stockmarketsim.bank.BankInternalAPI;
 import com.github.gaskapiotr.stockmarketsim.bank.StocksDTO;
 import com.github.gaskapiotr.stockmarketsim.bank.entity.BankStock;
 import com.github.gaskapiotr.stockmarketsim.bank.mapper.BankMapper;
@@ -13,7 +14,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class BankManager implements BankExternalAPI {
+public class BankManager implements BankExternalAPI, BankInternalAPI {
     private final BankRepository bankRepository;
     private final BankMapper bankMapper;
 
@@ -32,5 +33,10 @@ public class BankManager implements BankExternalAPI {
                 .map(bankMapper::toEntity)
                 .toList();
         bankRepository.saveAll(bankStocks);
+    }
+
+    @Override
+    public boolean doesStockExist(String name) {
+        return bankRepository.findById(name).isPresent();
     }
 }
