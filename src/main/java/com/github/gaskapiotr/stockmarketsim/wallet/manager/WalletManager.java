@@ -7,5 +7,9 @@ import org.springframework.stereotype.Service;
 public class WalletManager implements WalletExternalAPI {
     public void sellStock(String wallet_id, String stock_name) {
         // TODO add logic
+        // TODO check if stock exist in bank
+        // TODO if no stock in the wallet fail with 400
+        // TODO if wallet doesn't exist create it
+        // TODO sell stock and add event
     }
 }
