@@ -2,15 +2,24 @@ package com.github.gaskapiotr.stockmarketsim.transaction.manager;
 
 import com.github.gaskapiotr.stockmarketsim.bank.BankInternalAPI;
 import com.github.gaskapiotr.stockmarketsim.transaction.TransactionExternalAPI;
+import com.github.gaskapiotr.stockmarketsim.wallet.WalletInternalAPI;
+import com.github.gaskapiotr.stockmarketsim.wallet.entity.WalletStock;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
 public class TransactionManager implements TransactionExternalAPI {
     private final BankInternalAPI bankInternalAPI;
-    public void sellStock(String wallet_id, String stock_name) {
+    private final WalletInternalAPI walletInternalAPI;
 
+    @Override
+    @Transactional
+    public void sellStock(String wallet_id, String stock_name) {
+        prepareBeforeTransaction(wallet_id, stock_name);
+        // TODO if no stock in the wallet fail with 400
+        walletInternalAPI.sellStock(wallet_id, stock_name);
     }
 
     private void prepareBeforeTransaction(String wallet_id, String stock_name) {
@@ -18,5 +27,6 @@ public class TransactionManager implements TransactionExternalAPI {
         if (!bankInternalAPI.doesStockExist(stock_name)) {
             // TODO throw exception `
         }
+        walletInternalAPI.createWalletIfDoesNotExist(wallet_id);
     }
 }
