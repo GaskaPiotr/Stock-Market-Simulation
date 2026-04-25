@@ -7,6 +7,7 @@ import com.github.gaskapiotr.stockmarketsim.wallet.entity.WalletStock;
 import com.github.gaskapiotr.stockmarketsim.wallet.repository.WalletRepository;
 import com.github.gaskapiotr.stockmarketsim.wallet.repository.WalletStockRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,22 +19,26 @@ import java.util.Optional;
 public class WalletManager implements WalletExternalAPI {
     private final WalletRepository walletRepository;
     private final WalletStockRepository walletStockRepository;
+    private final ApplicationEventPublisher eventPublisher;
     private final BankInternalAPI bankInternalAPI;
 
     @Override
     @Transactional
     public void sellStock(String wallet_id, String stock_name) {
-        // TODO add logic
-        // TODO if does not exist fail with 400
-        if (!bankInternalAPI.doesStockExist(stock_name)) {
-            // TODO throw exception `
-        }
-        createWalletIfDoesNotExist(wallet_id);
+        prepareBeforeTransaction(wallet_id, stock_name);
         // TODO if no stock in the wallet fail with 400
         WalletStock walletStock = getStockInWallet(wallet_id, stock_name).orElseThrow(
                 // TODO throw exception;
         );
         sellOneStock(walletStock);
+    }
+
+    private void prepareBeforeTransaction(String wallet_id, String stock_name) {
+        // TODO if does not exist fail with 400
+        if (!bankInternalAPI.doesStockExist(stock_name)) {
+            // TODO throw exception `
+        }
+        createWalletIfDoesNotExist(wallet_id);
     }
 
     // TODO catch exception if already added
@@ -64,6 +69,7 @@ public class WalletManager implements WalletExternalAPI {
         } else {
             walletStockRepository.save(walletStock);
         }
+        // TODO add sell stock event
     }
 
     private void decreaseStockQuantityByOne(WalletStock walletStock) {
