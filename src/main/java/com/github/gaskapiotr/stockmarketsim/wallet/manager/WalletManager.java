@@ -23,6 +23,7 @@ public class WalletManager implements WalletExternalAPI, WalletInternalAPI {
     private final ApplicationEventPublisher eventPublisher;
 
     @Override
+    @Transactional
     // TODO catch exception if already added
     public void createWalletIfDoesNotExist(String wallet_id) {
         if (walletRepository.findById(wallet_id).isEmpty()) {
