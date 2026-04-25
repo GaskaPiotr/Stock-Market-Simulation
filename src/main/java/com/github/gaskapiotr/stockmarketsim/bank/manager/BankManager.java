@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -39,4 +40,26 @@ public class BankManager implements BankExternalAPI, BankInternalAPI {
     public boolean doesStockExist(String name) {
         return bankRepository.findById(name).isPresent();
     }
+
+    void addStock(String stock_name) {
+        Optional<BankStock> bankStockOptional = bankRepository.findById(stock_name);
+
+        if (bankStockOptional.isPresent()) {
+            BankStock bankStock = bankStockOptional.get();
+            bankStock.setQuantity(bankStock.getQuantity() + 1);
+            bankRepository.save(bankStock);
+        } else {
+            BankStock bankStock = createBankStock(stock_name, 1);
+            bankRepository.save(bankStock);
+        }
+    }
+
+    private BankStock createBankStock(String stock_name, int quantity) {
+        BankStock bankStock = new BankStock();
+        bankStock.setName(stock_name);
+        bankStock.setQuantity(quantity);
+        return bankStock;
+    }
+
+
 }
