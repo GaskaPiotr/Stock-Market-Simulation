@@ -29,12 +29,12 @@ public class WalletManager implements WalletExternalAPI, WalletInternalAPI {
     public void addWalletIfDoesNotExist(String wallet_id) {
         if (walletRepository.findById(wallet_id).isEmpty()) {
             walletRepository.save(
-                    createEmptyWalletWithId(wallet_id)
+                    getEmptyWalletWithId(wallet_id)
             );
         }
     }
 
-    private Wallet createEmptyWalletWithId(String wallet_id) {
+    private Wallet getEmptyWalletWithId(String wallet_id) {
         Wallet wallet = new Wallet();
         wallet.setId(wallet_id);
         wallet.setStocks(new ArrayList<>());
