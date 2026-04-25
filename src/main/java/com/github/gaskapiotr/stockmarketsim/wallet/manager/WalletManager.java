@@ -26,7 +26,7 @@ public class WalletManager implements WalletExternalAPI, WalletInternalAPI {
     @Override
     @Transactional
     // TODO catch exception if already added
-    public void createWalletIfDoesNotExist(String wallet_id) {
+    public void addWalletIfDoesNotExist(String wallet_id) {
         if (walletRepository.findById(wallet_id).isEmpty()) {
             walletRepository.save(
                     createEmptyWalletWithId(wallet_id)

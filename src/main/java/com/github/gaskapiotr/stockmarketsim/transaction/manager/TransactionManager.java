@@ -27,6 +27,6 @@ public class TransactionManager implements TransactionExternalAPI {
         if (!bankInternalAPI.doesStockExist(stock_name)) {
             // TODO throw exception `
         }
-        walletInternalAPI.createWalletIfDoesNotExist(wallet_id);
+        walletInternalAPI.addWalletIfDoesNotExist(wallet_id);
     }
 }
