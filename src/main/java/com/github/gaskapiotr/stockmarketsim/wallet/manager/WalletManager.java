@@ -1,6 +1,7 @@
 package com.github.gaskapiotr.stockmarketsim.wallet.manager;
 
 import com.github.gaskapiotr.stockmarketsim.bank.BankInternalAPI;
+import com.github.gaskapiotr.stockmarketsim.wallet.SellStockEvent;
 import com.github.gaskapiotr.stockmarketsim.wallet.WalletExternalAPI;
 import com.github.gaskapiotr.stockmarketsim.wallet.WalletInternalAPI;
 import com.github.gaskapiotr.stockmarketsim.wallet.entity.Wallet;
@@ -46,7 +47,8 @@ public class WalletManager implements WalletExternalAPI, WalletInternalAPI {
         WalletStock walletStock = getStockInWallet(wallet_id, stock_name).orElseThrow(
             // TODO throw exception;
         );
-        decreaseStockAndPublishEvent(walletStock);
+        decreaseStock(walletStock);
+        publishSellStockEvent(wallet_id, stock_name);
     }
 
     // TODO add pessimistic lock
@@ -54,17 +56,20 @@ public class WalletManager implements WalletExternalAPI, WalletInternalAPI {
         return walletStockRepository.findByNameAndWalletId(stock_name, wallet_id);
     }
 
-    private void decreaseStockAndPublishEvent(WalletStock walletStock) {
+    private void decreaseStock(WalletStock walletStock) {
         decreaseStockQuantityByOne(walletStock);
         if (walletStock.getQuantity() <= 0) {
             walletStockRepository.delete(walletStock);
         } else {
             walletStockRepository.save(walletStock);
         }
-        // TODO add sell stock event
     }
 
     private void decreaseStockQuantityByOne(WalletStock walletStock) {
         walletStock.setQuantity(walletStock.getQuantity() - 1);
+    }
+
+    private void publishSellStockEvent(String wallet_id, String stock_name) {
+        eventPublisher.publishEvent(new SellStockEvent(wallet_id, stock_name));
     }
 }
