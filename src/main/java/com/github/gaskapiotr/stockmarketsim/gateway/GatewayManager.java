@@ -51,4 +51,9 @@ public class GatewayManager {
     public void setStocks(@RequestBody StocksDTO stocks) {
         bankExternalAPI.setStocks(stocks);
     }
+
+    @GetMapping("/log")
+    public void getLogs() {
+        // TODO get stocks
+    }
 }
