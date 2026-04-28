@@ -4,7 +4,9 @@ import com.github.gaskapiotr.stockmarketsim.bank.BankExternalAPI;
 import com.github.gaskapiotr.stockmarketsim.bank.StocksDTO;
 import com.github.gaskapiotr.stockmarketsim.gateway.request.TradeRequest;
 import com.github.gaskapiotr.stockmarketsim.gateway.request.TradeType;
+import com.github.gaskapiotr.stockmarketsim.transaction.TransactionExternalAPI;
 import com.github.gaskapiotr.stockmarketsim.wallet.WalletDTO;
+import com.github.gaskapiotr.stockmarketsim.wallet.WalletExternalAPI;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,6 +14,8 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class GatewayManager {
     private final BankExternalAPI bankExternalAPI;
+    private final WalletExternalAPI walletExternalAPI;
+    private final TransactionExternalAPI transactionExternalAPI;
 
     @PostMapping("/wallets/{wallet_id}/stocks/{stock_name}")
     public void tradeStock(
@@ -21,14 +25,14 @@ public class GatewayManager {
         if (tradeRequest.type() == TradeType.BUY) {
             // TODO bank sells then user buys
         } else if (tradeRequest.type() == TradeType.SELL) {
-            // TODO user sells then bank buys
+            transactionExternalAPI.sellStock(wallet_id, stock_name);
         }
         // TODO return HTTP response
     }
 
     @GetMapping("/wallets/{wallet_id}")
     public WalletDTO getWallet(@PathVariable String wallet_id) {
-        // TODO return get wallet
+        return walletExternalAPI.getWallet(wallet_id);
     }
 
     @GetMapping("/stocks")

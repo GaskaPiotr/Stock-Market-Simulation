@@ -6,6 +6,7 @@ import com.github.gaskapiotr.stockmarketsim.wallet.WalletExternalAPI;
 import com.github.gaskapiotr.stockmarketsim.wallet.WalletInternalAPI;
 import com.github.gaskapiotr.stockmarketsim.wallet.entity.Wallet;
 import com.github.gaskapiotr.stockmarketsim.wallet.entity.WalletStock;
+import com.github.gaskapiotr.stockmarketsim.wallet.mapper.WalletMapper;
 import com.github.gaskapiotr.stockmarketsim.wallet.repository.WalletRepository;
 import com.github.gaskapiotr.stockmarketsim.wallet.repository.WalletStockRepository;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +22,7 @@ import java.util.Optional;
 public class WalletManager implements WalletExternalAPI, WalletInternalAPI {
     private final WalletRepository walletRepository;
     private final WalletStockRepository walletStockRepository;
+    private final WalletMapper walletMapper;
 
     @Override
     @Transactional
@@ -44,7 +46,7 @@ public class WalletManager implements WalletExternalAPI, WalletInternalAPI {
     @Transactional
     public void sellStock(String wallet_id, String stock_name) {
         WalletStock walletStock = getStockInWallet(wallet_id, stock_name).orElseThrow(
-            // TODO throw exception;
+            // TODO throw exception
         );
         decreaseStock(walletStock);
     }
@@ -69,8 +71,11 @@ public class WalletManager implements WalletExternalAPI, WalletInternalAPI {
 
     @Override
     public WalletDTO getWallet(String wallet_id) {
-        walletRepository.findById(wallet_id);
-        // TODO return mapped wallet dto
+        return walletMapper.toDTO(
+                walletRepository.findById(wallet_id)
+                        .orElseThrow(
+                                // TODO throw exception
+                ));
     }
 
 }
