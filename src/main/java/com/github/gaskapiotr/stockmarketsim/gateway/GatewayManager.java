@@ -37,7 +37,7 @@ public class GatewayManager {
     }
 
     @GetMapping("/wallets/{wallet_id}/stocks/{stock_name}")
-    public WalletStockDTO getWalletStock(@PathVariable String wallet_id,
+    public int getWalletStockQuantity(@PathVariable String wallet_id,
                                          @PathVariable String stock_name) {
         // TODO return get wallet stock
     }
