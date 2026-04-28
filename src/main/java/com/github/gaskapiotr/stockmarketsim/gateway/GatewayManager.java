@@ -7,6 +7,7 @@ import com.github.gaskapiotr.stockmarketsim.gateway.request.TradeType;
 import com.github.gaskapiotr.stockmarketsim.transaction.TransactionExternalAPI;
 import com.github.gaskapiotr.stockmarketsim.wallet.WalletDTO;
 import com.github.gaskapiotr.stockmarketsim.wallet.WalletExternalAPI;
+import com.github.gaskapiotr.stockmarketsim.wallet.WalletStockDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -33,6 +34,12 @@ public class GatewayManager {
     @GetMapping("/wallets/{wallet_id}")
     public WalletDTO getWallet(@PathVariable String wallet_id) {
         return walletExternalAPI.getWallet(wallet_id);
+    }
+
+    @GetMapping("/wallets/{wallet_id}/stocks/{stock_name}")
+    public WalletStockDTO getWalletStock(@PathVariable String wallet_id,
+                                         @PathVariable String stock_name) {
+        // TODO return get wallet stock
     }
 
     @GetMapping("/stocks")
