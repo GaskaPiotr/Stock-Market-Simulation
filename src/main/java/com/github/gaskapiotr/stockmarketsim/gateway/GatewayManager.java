@@ -4,6 +4,7 @@ import com.github.gaskapiotr.stockmarketsim.bank.BankExternalAPI;
 import com.github.gaskapiotr.stockmarketsim.bank.StocksDTO;
 import com.github.gaskapiotr.stockmarketsim.gateway.request.TradeRequest;
 import com.github.gaskapiotr.stockmarketsim.gateway.request.TradeType;
+import com.github.gaskapiotr.stockmarketsim.wallet.WalletDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,6 +24,11 @@ public class GatewayManager {
             // TODO user sells then bank buys
         }
         // TODO return HTTP response
+    }
+
+    @GetMapping("/wallets/{wallet_id}")
+    public WalletDTO getWallet(@PathVariable String wallet_id) {
+        // TODO return get wallet
     }
 
     @GetMapping("/stocks")
