@@ -4,7 +4,6 @@ import com.github.gaskapiotr.stockmarketsim.bank.BankInternalAPI;
 import com.github.gaskapiotr.stockmarketsim.transaction.SellStockEvent;
 import com.github.gaskapiotr.stockmarketsim.transaction.TransactionExternalAPI;
 import com.github.gaskapiotr.stockmarketsim.wallet.WalletInternalAPI;
-import com.github.gaskapiotr.stockmarketsim.wallet.entity.WalletStock;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
@@ -12,7 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
-public class TransactionManager implements TransactionExternalAPI {
+public class StockTransactionManager implements TransactionExternalAPI {
     private final BankInternalAPI bankInternalAPI;
     private final WalletInternalAPI walletInternalAPI;
     private final ApplicationEventPublisher eventPublisher;
