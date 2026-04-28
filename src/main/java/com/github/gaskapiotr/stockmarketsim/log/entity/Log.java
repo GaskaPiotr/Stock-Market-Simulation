@@ -15,6 +15,7 @@ import lombok.Setter;
 public class Log {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    // TODO change Long to lower number
     private Long id;
     private String type;
     private String wallet_id;
