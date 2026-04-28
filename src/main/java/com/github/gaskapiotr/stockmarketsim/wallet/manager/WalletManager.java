@@ -100,7 +100,7 @@ public class WalletManager implements WalletExternalAPI, WalletInternalAPI {
 
     @Override
     public int getWalletStockQuantity(String wallet_id, String stock_name) {
-        Optional<WalletStock> walletStock =  getStockInWallet(wallet_id, stock_name)
+        Optional<WalletStock> walletStock =  getStockInWallet(wallet_id, stock_name);
         return walletStock.map(WalletStock::getQuantity).orElse(0);
     }
 
