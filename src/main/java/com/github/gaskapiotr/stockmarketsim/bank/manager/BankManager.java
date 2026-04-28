@@ -29,12 +29,18 @@ public class BankManager implements BankExternalAPI, BankInternalAPI {
     // TODO change to setStocks?
     @Transactional
     @Override
-    public void addStocks(StocksDTO stocksDTO) {
+    public void setStocks(StocksDTO stocksDTO) {
+        deleteBankStocks();
         List<BankStock> bankStocks = stocksDTO.stocks().stream()
                 .map(bankMapper::toEntity)
                 .toList();
         bankRepository.saveAll(bankStocks);
     }
+
+    private void deleteBankStocks() {
+        bankRepository.deleteAll();
+    }
+
 
     @Override
     public boolean doesStockExist(String name) {

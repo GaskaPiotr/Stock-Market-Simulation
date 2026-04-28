@@ -48,7 +48,7 @@ public class GatewayManager {
     }
 
     @PostMapping("/stocks")
-    public void addStocks(@RequestBody StocksDTO stocks) {
-        bankExternalAPI.addStocks(stocks);
+    public void setStocks(@RequestBody StocksDTO stocks) {
+        bankExternalAPI.setStocks(stocks);
     }
 }
