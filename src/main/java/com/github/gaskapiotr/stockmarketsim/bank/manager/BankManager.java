@@ -63,5 +63,16 @@ public class BankManager implements BankExternalAPI, BankInternalAPI {
         return bankStock;
     }
 
-
+    @Override
+    @Transactional
+    public void decreaseStock(String stock_name) {
+        BankStock bankStock = bankRepository.findById(stock_name).orElseThrow(
+                // TODO throw exception
+        );
+        if (bankStock.getQuantity() == 0) {
+            // TODO throw exception
+        }
+        bankStock.setQuantity(bankStock.getQuantity() - 1);
+        bankRepository.save(bankStock);
+    }
 }
