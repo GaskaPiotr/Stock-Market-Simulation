@@ -59,4 +59,14 @@ public class GatewayManager {
     public LogsDTO getLogs() {
         return logExternalAPI.getLogs();
     }
+
+    @PostMapping("/chaos")
+    public void kill() {
+        new Thread(() -> {
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException ignored) {}
+            System.exit(0);
+        }).start();
+    }
 }
