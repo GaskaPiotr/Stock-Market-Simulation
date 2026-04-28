@@ -1,6 +1,7 @@
 package com.github.gaskapiotr.stockmarketsim.transaction.manager;
 
 import com.github.gaskapiotr.stockmarketsim.bank.BankInternalAPI;
+import com.github.gaskapiotr.stockmarketsim.transaction.BuyStockEvent;
 import com.github.gaskapiotr.stockmarketsim.transaction.SellStockEvent;
 import com.github.gaskapiotr.stockmarketsim.transaction.TransactionExternalAPI;
 import com.github.gaskapiotr.stockmarketsim.wallet.WalletInternalAPI;
@@ -44,7 +45,10 @@ public class StockTransactionManager implements TransactionExternalAPI {
         prepareBeforeTransaction(wallet_id, stock_name);
         bankInternalAPI.decreaseStock(stock_name);
         walletInternalAPI.increaseStock(wallet_id, stock_name);
-        // TODO publish buy stock event
+        publishBuyStockEvent(wallet_id, stock_name);
     }
 
+    private void publishBuyStockEvent(String wallet_id, String stock_name) {
+        eventPublisher.publishEvent(new BuyStockEvent(wallet_id, stock_name));
+    }
 }
