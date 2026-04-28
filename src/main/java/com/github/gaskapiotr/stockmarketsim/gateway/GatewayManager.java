@@ -23,7 +23,7 @@ public class GatewayManager {
             @PathVariable String stock_name,
             @RequestBody TradeRequest tradeRequest) {
         if (tradeRequest.type() == TradeType.BUY) {
-            // TODO bank sells then user buys
+            transactionExternalAPI.buyStock(wallet_id, stock_name);
         } else if (tradeRequest.type() == TradeType.SELL) {
             transactionExternalAPI.sellStock(wallet_id, stock_name);
         }
