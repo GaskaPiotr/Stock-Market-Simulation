@@ -4,6 +4,8 @@ import com.github.gaskapiotr.stockmarketsim.bank.BankExternalAPI;
 import com.github.gaskapiotr.stockmarketsim.bank.StocksDTO;
 import com.github.gaskapiotr.stockmarketsim.gateway.request.TradeRequest;
 import com.github.gaskapiotr.stockmarketsim.gateway.request.TradeType;
+import com.github.gaskapiotr.stockmarketsim.log.LogExternalAPI;
+import com.github.gaskapiotr.stockmarketsim.log.LogsDTO;
 import com.github.gaskapiotr.stockmarketsim.transaction.TransactionExternalAPI;
 import com.github.gaskapiotr.stockmarketsim.wallet.WalletDTO;
 import com.github.gaskapiotr.stockmarketsim.wallet.WalletExternalAPI;
@@ -17,6 +19,7 @@ public class GatewayManager {
     private final BankExternalAPI bankExternalAPI;
     private final WalletExternalAPI walletExternalAPI;
     private final TransactionExternalAPI transactionExternalAPI;
+    private final LogExternalAPI logExternalAPI;
 
     @PostMapping("/wallets/{wallet_id}/stocks/{stock_name}")
     public void tradeStock(
@@ -53,7 +56,7 @@ public class GatewayManager {
     }
 
     @GetMapping("/log")
-    public void getLogs() {
-        // TODO get stocks
+    public LogsDTO getLogs() {
+        return logExternalAPI.getLogs();
     }
 }
