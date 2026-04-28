@@ -23,7 +23,7 @@ public class TransactionManager implements TransactionExternalAPI {
         prepareBeforeTransaction(wallet_id, stock_name);
         // TODO if no stock in the wallet fail with 400
         walletInternalAPI.sellStock(wallet_id, stock_name);
-        // TODO bank api add stock
+        bankInternalAPI.addStock(stock_name);
         publishSellStockEvent(wallet_id, stock_name);
     }
 

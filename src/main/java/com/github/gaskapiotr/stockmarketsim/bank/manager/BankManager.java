@@ -41,7 +41,9 @@ public class BankManager implements BankExternalAPI, BankInternalAPI {
         return bankRepository.findById(name).isPresent();
     }
 
-    void addStock(String stock_name) {
+    @Override
+    @Transactional
+    public void addStock(String stock_name) {
         Optional<BankStock> bankStockOptional = bankRepository.findById(stock_name);
 
         if (bankStockOptional.isPresent()) {
