@@ -1,6 +1,7 @@
 package com.github.gaskapiotr.stockmarketsim.wallet.manager;
 
 import com.github.gaskapiotr.stockmarketsim.transaction.SellStockEvent;
+import com.github.gaskapiotr.stockmarketsim.wallet.WalletDTO;
 import com.github.gaskapiotr.stockmarketsim.wallet.WalletExternalAPI;
 import com.github.gaskapiotr.stockmarketsim.wallet.WalletInternalAPI;
 import com.github.gaskapiotr.stockmarketsim.wallet.entity.Wallet;
@@ -64,6 +65,12 @@ public class WalletManager implements WalletExternalAPI, WalletInternalAPI {
 
     private void decreaseStockQuantityByOne(WalletStock walletStock) {
         walletStock.setQuantity(walletStock.getQuantity() - 1);
+    }
+
+    @Override
+    public WalletDTO getWallet(String wallet_id) {
+        walletRepository.findById(wallet_id);
+        // TODO return mapped wallet dto
     }
 
 }
