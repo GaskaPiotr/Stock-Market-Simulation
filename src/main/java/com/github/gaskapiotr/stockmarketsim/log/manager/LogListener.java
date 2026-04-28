@@ -13,11 +13,17 @@ public class LogListener {
 
     @ApplicationModuleListener
     void on(BuyStockEvent event) {
-        // TODO handle buy event
+        logManager.addBuyLog(
+                event.wallet_id(),
+                event.stock_name()
+        );
     }
 
     @ApplicationModuleListener
     void on(SellStockEvent event) {
-        // TODO handle sell event
+        logManager.addSellLog(
+                event.wallet_id(),
+                event.stock_name()
+        );
     }
 }
