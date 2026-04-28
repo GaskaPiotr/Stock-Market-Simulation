@@ -1,16 +1,28 @@
 package com.github.gaskapiotr.stockmarketsim.log.manager;
 
 import com.github.gaskapiotr.stockmarketsim.log.LogExternalAPI;
+import com.github.gaskapiotr.stockmarketsim.log.LogsDTO;
 import com.github.gaskapiotr.stockmarketsim.log.entity.Log;
+import com.github.gaskapiotr.stockmarketsim.log.mapper.LogMapper;
 import com.github.gaskapiotr.stockmarketsim.log.repository.LogRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
 public class LogManager implements LogExternalAPI {
     private final LogRepository logRepository;
+    private final LogMapper logMapper;
 
+    @Override
+    public LogsDTO getLogs() {
+        return new LogsDTO(logRepository.findAll().stream().map(
+                // TODO log mapper to dto
+        ));
+    }
+
+    @Transactional
     private void addLog(String type, String wallet_id, String stock_name) {
         Log log = createLog(type, wallet_id, stock_name);
         logRepository.save(log);
