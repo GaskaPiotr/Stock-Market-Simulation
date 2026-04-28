@@ -42,8 +42,8 @@ public class StockTransactionManager implements TransactionExternalAPI {
     @Transactional
     public void buyStock(String wallet_id, String stock_name) {
         prepareBeforeTransaction(wallet_id, stock_name);
-        // TODO bank decrease stock
-        // TODO wallet increase stock
+        bankInternalAPI.decreaseStock(stock_name);
+        walletInternalAPI.increaseStock(wallet_id, stock_name);
         // TODO publish buy stock event
     }
 
