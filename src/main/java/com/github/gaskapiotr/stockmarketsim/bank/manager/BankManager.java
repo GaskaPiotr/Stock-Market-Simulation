@@ -2,10 +2,12 @@ package com.github.gaskapiotr.stockmarketsim.bank.manager;
 
 import com.github.gaskapiotr.stockmarketsim.bank.BankExternalAPI;
 import com.github.gaskapiotr.stockmarketsim.bank.BankInternalAPI;
+import com.github.gaskapiotr.stockmarketsim.bank.BankStockQuantityIsZeroException;
 import com.github.gaskapiotr.stockmarketsim.bank.StocksDTO;
 import com.github.gaskapiotr.stockmarketsim.bank.entity.BankStock;
 import com.github.gaskapiotr.stockmarketsim.bank.mapper.BankMapper;
 import com.github.gaskapiotr.stockmarketsim.bank.repository.BankRepository;
+import com.github.gaskapiotr.stockmarketsim.gateway.BankStockNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -73,10 +75,10 @@ public class BankManager implements BankExternalAPI, BankInternalAPI {
     @Transactional
     public void decreaseStock(String stock_name) {
         BankStock bankStock = bankRepository.findById(stock_name).orElseThrow(
-                // TODO throw exception
+                () -> new BankStockNotFoundException(stock_name)
         );
         if (bankStock.getQuantity() == 0) {
-            // TODO throw exception
+            throw new BankStockQuantityIsZeroException(stock_name);
         }
         bankStock.setQuantity(bankStock.getQuantity() - 1);
         bankRepository.save(bankStock);
