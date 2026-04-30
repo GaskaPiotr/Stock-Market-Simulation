@@ -40,7 +40,7 @@ public class WalletManager implements WalletExternalAPI, WalletInternalAPI {
 
     @Override
     @Transactional
-    public void sellStock(String wallet_id, String stock_name) {
+    public void decreaseStock(String wallet_id, String stock_name) {
         WalletStock walletStock = getStockInWalletWithLock(wallet_id, stock_name).orElseThrow(
                 () -> new WalletStockNotFoundException(wallet_id, stock_name)
         );

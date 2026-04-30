@@ -49,7 +49,7 @@ public class BankManager implements BankExternalAPI, BankInternalAPI {
 
     @Override
     @Transactional
-    public void addStock(String stock_name) {
+    public void increaseStock(String stock_name) {
         BankStock bankStock = bankRepository.findByIdWithLock(stock_name).orElseGet(
                 () -> createBankStockWithQuantityZero(stock_name)
         );
