@@ -44,15 +44,14 @@ public class WalletManager implements WalletExternalAPI, WalletInternalAPI {
     @Override
     @Transactional
     public void sellStock(String wallet_id, String stock_name) {
-        WalletStock walletStock = getStockInWallet(wallet_id, stock_name).orElseThrow(
+        WalletStock walletStock = getStockInWalletWithLock(wallet_id, stock_name).orElseThrow(
                 () -> new WalletStockNotFoundException(wallet_id, stock_name)
         );
         decreaseStock(walletStock);
     }
 
-    // TODO add pessimistic lock
-    private Optional<WalletStock> getStockInWallet(String wallet_id, String stock_name) {
-        return walletStockRepository.findByNameAndWalletId(stock_name, wallet_id);
+    private Optional<WalletStock> getStockInWalletWithLock(String wallet_id, String stock_name) {
+        return walletStockRepository.findByNameAndWalletIdWithLock(stock_name, wallet_id);
     }
 
     private void decreaseStock(WalletStock walletStock) {
@@ -95,6 +94,11 @@ public class WalletManager implements WalletExternalAPI, WalletInternalAPI {
             walletStock.setWallet(wallet);
         }
         walletStockRepository.save(walletStock);
+    }
+
+
+    private Optional<WalletStock> getStockInWallet(String wallet_id, String stock_name) {
+        return walletStockRepository.findByNameAndWalletId(stock_name, wallet_id);
     }
 
     @Override
