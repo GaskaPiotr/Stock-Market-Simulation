@@ -4,6 +4,7 @@ import com.github.gaskapiotr.stockmarketsim.transaction.SellStockEvent;
 import com.github.gaskapiotr.stockmarketsim.wallet.WalletDTO;
 import com.github.gaskapiotr.stockmarketsim.wallet.WalletExternalAPI;
 import com.github.gaskapiotr.stockmarketsim.wallet.WalletInternalAPI;
+import com.github.gaskapiotr.stockmarketsim.wallet.WalletStockNotFoundException;
 import com.github.gaskapiotr.stockmarketsim.wallet.entity.Wallet;
 import com.github.gaskapiotr.stockmarketsim.wallet.entity.WalletStock;
 import com.github.gaskapiotr.stockmarketsim.wallet.mapper.WalletMapper;
@@ -46,7 +47,7 @@ public class WalletManager implements WalletExternalAPI, WalletInternalAPI {
     @Transactional
     public void sellStock(String wallet_id, String stock_name) {
         WalletStock walletStock = getStockInWallet(wallet_id, stock_name).orElseThrow(
-            // TODO throw exception
+                () -> new WalletStockNotFoundException(wallet_id, stock_name)
         );
         decreaseStock(walletStock);
     }
@@ -58,7 +59,7 @@ public class WalletManager implements WalletExternalAPI, WalletInternalAPI {
 
     private void decreaseStock(WalletStock walletStock) {
         decreaseStockQuantityByOne(walletStock);
-        if (walletStock.getQuantity() <= 0) {
+        if (walletStock.getQuantity() == 0) {
             walletStockRepository.delete(walletStock);
         } else {
             walletStockRepository.save(walletStock);
