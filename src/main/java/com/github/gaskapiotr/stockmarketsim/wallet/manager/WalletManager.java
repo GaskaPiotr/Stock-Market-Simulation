@@ -1,9 +1,6 @@
 package com.github.gaskapiotr.stockmarketsim.wallet.manager;
 
-import com.github.gaskapiotr.stockmarketsim.wallet.WalletDTO;
-import com.github.gaskapiotr.stockmarketsim.wallet.WalletExternalAPI;
-import com.github.gaskapiotr.stockmarketsim.wallet.WalletInternalAPI;
-import com.github.gaskapiotr.stockmarketsim.wallet.WalletStockNotFoundException;
+import com.github.gaskapiotr.stockmarketsim.wallet.*;
 import com.github.gaskapiotr.stockmarketsim.wallet.entity.Wallet;
 import com.github.gaskapiotr.stockmarketsim.wallet.entity.WalletStock;
 import com.github.gaskapiotr.stockmarketsim.wallet.mapper.WalletMapper;
@@ -70,9 +67,8 @@ public class WalletManager implements WalletExternalAPI, WalletInternalAPI {
     @Override
     public WalletDTO getWallet(String wallet_id) {
         return walletMapper.toDTO(
-                walletRepository.findById(wallet_id)
-                        .orElseThrow(
-                                // TODO throw exception
+                walletRepository.findById(wallet_id).orElseThrow(
+                        () -> new WalletNotFoundException(wallet_id)
                 ));
     }
 
