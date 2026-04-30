@@ -31,7 +31,6 @@ public class GatewayManager {
         } else if (tradeRequest.type() == TradeType.SELL) {
             transactionExternalAPI.sellStock(wallet_id, stock_name);
         }
-        // TODO return HTTP response
     }
 
     @GetMapping("/wallets/{wallet_id}")

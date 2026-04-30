@@ -28,7 +28,6 @@ public class BankManager implements BankExternalAPI, BankInternalAPI {
                 .toList());
     }
 
-    // TODO change to setStocks?
     @Transactional
     @Override
     public void setStocks(StocksDTO stocksDTO) {

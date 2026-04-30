@@ -22,7 +22,6 @@ public class StockTransactionManager implements TransactionExternalAPI {
     @Transactional
     public void sellStock(String wallet_id, String stock_name) {
         prepareBeforeTransaction(wallet_id, stock_name);
-        // TODO if no stock in the wallet fail with 400
         walletInternalAPI.sellStock(wallet_id, stock_name);
         bankInternalAPI.addStock(stock_name);
         publishSellStockEvent(wallet_id, stock_name);

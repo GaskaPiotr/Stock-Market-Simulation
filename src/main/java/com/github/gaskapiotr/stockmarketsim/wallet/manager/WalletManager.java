@@ -1,6 +1,5 @@
 package com.github.gaskapiotr.stockmarketsim.wallet.manager;
 
-import com.github.gaskapiotr.stockmarketsim.transaction.SellStockEvent;
 import com.github.gaskapiotr.stockmarketsim.wallet.WalletDTO;
 import com.github.gaskapiotr.stockmarketsim.wallet.WalletExternalAPI;
 import com.github.gaskapiotr.stockmarketsim.wallet.WalletInternalAPI;
@@ -11,7 +10,6 @@ import com.github.gaskapiotr.stockmarketsim.wallet.mapper.WalletMapper;
 import com.github.gaskapiotr.stockmarketsim.wallet.repository.WalletRepository;
 import com.github.gaskapiotr.stockmarketsim.wallet.repository.WalletStockRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
