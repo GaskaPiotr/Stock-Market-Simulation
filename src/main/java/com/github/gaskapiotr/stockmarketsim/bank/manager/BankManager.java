@@ -1,9 +1,6 @@
 package com.github.gaskapiotr.stockmarketsim.bank.manager;
 
-import com.github.gaskapiotr.stockmarketsim.bank.BankExternalAPI;
-import com.github.gaskapiotr.stockmarketsim.bank.BankInternalAPI;
-import com.github.gaskapiotr.stockmarketsim.bank.BankStockQuantityIsZeroException;
-import com.github.gaskapiotr.stockmarketsim.bank.StocksDTO;
+import com.github.gaskapiotr.stockmarketsim.bank.*;
 import com.github.gaskapiotr.stockmarketsim.bank.entity.BankStock;
 import com.github.gaskapiotr.stockmarketsim.bank.mapper.BankMapper;
 import com.github.gaskapiotr.stockmarketsim.bank.repository.BankRepository;
@@ -35,6 +32,11 @@ public class BankManager implements BankExternalAPI, BankInternalAPI {
         List<BankStock> bankStocks = stocksDTO.stocks().stream()
                 .map(bankMapper::toEntity)
                 .toList();
+        bankStocks.forEach(stock -> {
+            if (stock.getQuantity() < 1) {
+                throw new BankStockInvalidQuantityException(stock.getName(), stock.getQuantity());
+            }
+        });
         bankRepository.saveAll(bankStocks);
     }
 

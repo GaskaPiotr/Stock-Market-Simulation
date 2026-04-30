@@ -1,5 +1,6 @@
 package com.github.gaskapiotr.stockmarketsim.gateway;
 
+import com.github.gaskapiotr.stockmarketsim.bank.BankStockInvalidQuantityException;
 import com.github.gaskapiotr.stockmarketsim.bank.BankStockQuantityIsZeroException;
 import com.github.gaskapiotr.stockmarketsim.wallet.WalletNotFoundException;
 import com.github.gaskapiotr.stockmarketsim.wallet.WalletStockNotFoundException;
@@ -35,6 +36,11 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(WalletStockNotFoundException.class)
     public ResponseEntity<String> handleWalletStockNotFound(WalletStockNotFoundException exception) {
+        return badRequest(exception);
+    }
+
+    @ExceptionHandler(BankStockInvalidQuantityException.class)
+    public ResponseEntity<String> handleBankStockInvalidQuantity(BankStockInvalidQuantityException exception) {
         return badRequest(exception);
     }
 
