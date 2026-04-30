@@ -24,6 +24,13 @@ public class LogManager implements LogExternalAPI {
         );
     }
 
+    void addBuyLog(String wallet_id, String stock_name) {
+        addLog("buy", wallet_id, stock_name);
+    }
+    void addSellLog(String wallet_id, String stock_name) {
+        addLog("sell", wallet_id, stock_name);
+    }
+
     @Transactional
     private void addLog(String type, String wallet_id, String stock_name) {
         Log log = createLog(type, wallet_id, stock_name);
@@ -36,12 +43,5 @@ public class LogManager implements LogExternalAPI {
         log.setWallet_id(wallet_id);
         log.setStock_name(stock_name);
         return log;
-    }
-
-    void addBuyLog(String wallet_id, String stock_name) {
-        addLog("buy", wallet_id, stock_name);
-    }
-    void addSellLog(String wallet_id, String stock_name) {
-        addLog("sell", wallet_id, stock_name);
     }
 }
