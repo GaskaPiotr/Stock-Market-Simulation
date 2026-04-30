@@ -7,8 +7,8 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
-    @ExceptionHandler(IllegalArgumentException.class)
-    public ResponseEntity<String> handleNotFound(IllegalArgumentException exception) {
+    @ExceptionHandler(BankStockNotFoundException.class)
+    public ResponseEntity<String> handleBankStockNotFound(BankStockNotFoundException exception) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(exception.getMessage());
     }
 }

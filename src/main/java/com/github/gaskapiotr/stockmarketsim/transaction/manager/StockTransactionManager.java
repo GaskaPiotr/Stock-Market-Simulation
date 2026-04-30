@@ -1,6 +1,7 @@
 package com.github.gaskapiotr.stockmarketsim.transaction.manager;
 
 import com.github.gaskapiotr.stockmarketsim.bank.BankInternalAPI;
+import com.github.gaskapiotr.stockmarketsim.gateway.BankStockNotFoundException;
 import com.github.gaskapiotr.stockmarketsim.transaction.BuyStockEvent;
 import com.github.gaskapiotr.stockmarketsim.transaction.SellStockEvent;
 import com.github.gaskapiotr.stockmarketsim.transaction.TransactionExternalAPI;
@@ -29,7 +30,7 @@ public class StockTransactionManager implements TransactionExternalAPI {
 
     private void prepareBeforeTransaction(String wallet_id, String stock_name) {
         if (!bankInternalAPI.doesStockExist(stock_name)) {
-            throw new IllegalArgumentException("Stock not found in the bank");
+            throw new BankStockNotFoundException(stock_name);
         }
         walletInternalAPI.addWalletIfDoesNotExist(wallet_id);
     }
