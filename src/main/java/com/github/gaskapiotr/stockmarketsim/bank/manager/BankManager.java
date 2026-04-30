@@ -30,14 +30,14 @@ public class BankManager implements BankExternalAPI, BankInternalAPI {
     @Transactional
     @Override
     public void setStocks(StocksDTO stocksDTO) {
-        deleteBankStocks();
+        deleteAllBankStocks();
         List<BankStock> bankStocks = stocksDTO.stocks().stream()
                 .map(bankMapper::toEntity)
                 .toList();
         bankRepository.saveAll(bankStocks);
     }
 
-    private void deleteBankStocks() {
+    private void deleteAllBankStocks() {
         bankRepository.deleteAll();
     }
 
@@ -53,7 +53,7 @@ public class BankManager implements BankExternalAPI, BankInternalAPI {
         BankStock bankStock = bankRepository.findByIdWithLock(stock_name).orElseGet(
                 () -> createBankStockWithQuantityZero(stock_name)
         );
-        increaseStockByOne(bankStock);
+        increaseStockQuantityByOne(bankStock);
         bankRepository.save(bankStock);
     }
 
@@ -68,7 +68,7 @@ public class BankManager implements BankExternalAPI, BankInternalAPI {
         return bankStock;
     }
 
-    private void increaseStockByOne(BankStock bankStock) {
+    private void increaseStockQuantityByOne(BankStock bankStock) {
         bankStock.setQuantity(bankStock.getQuantity() + 1);
     }
 
@@ -81,11 +81,11 @@ public class BankManager implements BankExternalAPI, BankInternalAPI {
         if (bankStock.getQuantity() == 0) {
             throw new BankStockQuantityIsZeroException(stock_name);
         }
-        decreaseStockByOne(bankStock);
+        decreaseStockQuantityByOne(bankStock);
         bankRepository.save(bankStock);
     }
 
-    private void decreaseStockByOne(BankStock bankStock) {
+    private void decreaseStockQuantityByOne(BankStock bankStock) {
         bankStock.setQuantity(bankStock.getQuantity() - 1);
     }
 }
