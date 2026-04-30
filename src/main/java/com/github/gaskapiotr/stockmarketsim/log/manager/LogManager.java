@@ -17,10 +17,9 @@ public class LogManager implements LogExternalAPI {
 
     @Override
     public LogsDTO getLogs() {
-        return new LogsDTO(logRepository.findAll().stream().map(
-                logMapper::toDTO
-            )
-            .toList()
+        return new LogsDTO(logRepository.findAll().stream()
+                .map(logMapper::toDTO)
+                .toList()
         );
     }
 
