@@ -73,7 +73,7 @@ public class BankManager implements BankExternalAPI, BankInternalAPI {
     @Override
     @Transactional
     public void decreaseStock(String stock_name) {
-        BankStock bankStock = bankRepository.findById(stock_name).orElseThrow(
+        BankStock bankStock = bankRepository.findByIdWithLock(stock_name).orElseThrow(
                 () -> new BankStockNotFoundException(stock_name)
         );
         if (bankStock.getQuantity() == 0) {
