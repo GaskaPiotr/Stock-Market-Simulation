@@ -85,7 +85,7 @@ public class WalletManager implements WalletExternalAPI, WalletInternalAPI {
             walletStock.setName(stock_name);
             walletStock.setQuantity(1);
             Wallet wallet = walletRepository.findById(wallet_id).orElseThrow(
-                    // TODO throw exception
+                    () -> new WalletNotFoundException(wallet_id)
             );
             walletStock.setWallet(wallet);
         }
