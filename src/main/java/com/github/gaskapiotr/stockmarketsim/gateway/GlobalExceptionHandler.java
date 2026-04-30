@@ -6,6 +6,7 @@ import com.github.gaskapiotr.stockmarketsim.wallet.WalletNotFoundException;
 import com.github.gaskapiotr.stockmarketsim.wallet.WalletStockNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -46,5 +47,10 @@ public class GlobalExceptionHandler {
 
     private ResponseEntity<String> badRequest(RuntimeException exception) {
         return genericResponse(exception, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public ResponseEntity<String> handleInvalidBody(HttpMessageNotReadableException exception) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid HTTP request body");
     }
 }
