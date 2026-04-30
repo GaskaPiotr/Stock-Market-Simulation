@@ -75,21 +75,30 @@ public class WalletManager implements WalletExternalAPI, WalletInternalAPI {
     @Override
     @Transactional
     public void increaseStock(String wallet_id, String stock_name) {
-        Optional<WalletStock> walletStockOptional = getStockInWallet(wallet_id, stock_name);
-        WalletStock walletStock;
-        if (walletStockOptional.isPresent()) {
-            walletStock = walletStockOptional.get();
-            walletStock.setQuantity(walletStock.getQuantity() + 1);
-        } else {
-            walletStock = new WalletStock();
-            walletStock.setName(stock_name);
-            walletStock.setQuantity(1);
-            Wallet wallet = walletRepository.findById(wallet_id).orElseThrow(
-                    () -> new WalletNotFoundException(wallet_id)
-            );
-            walletStock.setWallet(wallet);
-        }
+        WalletStock walletStock = getStockInWalletWithLock(wallet_id, stock_name).orElseGet(
+                () -> createEmptyWalletStockWithQuantityZero(wallet_id, stock_name)
+        );
+        increaseStockQuantityByOne(walletStock);
         walletStockRepository.save(walletStock);
+    }
+
+    private void increaseStockQuantityByOne(WalletStock walletStock) {
+        walletStock.setQuantity(walletStock.getQuantity() + 1);
+    }
+
+    private WalletStock createEmptyWalletStockWithQuantityZero(String wallet_id, String stock_name) {
+        return createEmptyWalletStock(wallet_id, stock_name, 0);
+    }
+
+    private WalletStock createEmptyWalletStock(String wallet_id, String stock_name, int quantity) {
+        WalletStock walletStock = new WalletStock();
+        walletStock.setName(stock_name);
+        walletStock.setQuantity(quantity);
+        Wallet wallet = walletRepository.findById(wallet_id).orElseThrow(
+                () -> new WalletNotFoundException(wallet_id)
+        );
+        walletStock.setWallet(wallet);
+        return walletStock;
     }
 
 
