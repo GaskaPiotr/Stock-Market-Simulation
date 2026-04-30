@@ -28,9 +28,8 @@ public class StockTransactionManager implements TransactionExternalAPI {
     }
 
     private void prepareBeforeTransaction(String wallet_id, String stock_name) {
-        // TODO if does not exist fail with 400
         if (!bankInternalAPI.doesStockExist(stock_name)) {
-            // TODO throw exception `
+            throw new IllegalArgumentException("Stock not found in the bank");
         }
         walletInternalAPI.addWalletIfDoesNotExist(wallet_id);
     }
