@@ -29,6 +29,7 @@ public class BankManager implements BankExternalAPI, BankInternalAPI {
 
     @Transactional
     @Override
+    // TODO check if stock is more than 0
     public void setStocks(StocksDTO stocksDTO) {
         deleteAllBankStocks();
         List<BankStock> bankStocks = stocksDTO.stocks().stream()
