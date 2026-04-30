@@ -7,6 +7,7 @@ import com.github.gaskapiotr.stockmarketsim.wallet.mapper.WalletMapper;
 import com.github.gaskapiotr.stockmarketsim.wallet.repository.WalletRepository;
 import com.github.gaskapiotr.stockmarketsim.wallet.repository.WalletStockRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,12 +23,11 @@ public class WalletManager implements WalletExternalAPI, WalletInternalAPI {
 
     @Override
     @Transactional
-    // TODO catch exception if already added
     public void addWalletIfDoesNotExist(String wallet_id) {
-        if (walletRepository.findById(wallet_id).isEmpty()) {
-            walletRepository.save(
-                    getEmptyWalletWithId(wallet_id)
-            );
+        try {
+            walletRepository.save(getEmptyWalletWithId(wallet_id));
+        } catch (DataIntegrityViolationException _) {
+            // wallet already exists - safe to ignore
         }
     }
 
