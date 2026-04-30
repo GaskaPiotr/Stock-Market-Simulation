@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -51,16 +50,15 @@ public class BankManager implements BankExternalAPI, BankInternalAPI {
     @Override
     @Transactional
     public void addStock(String stock_name) {
-        Optional<BankStock> bankStockOptional = bankRepository.findById(stock_name);
+        BankStock bankStock = bankRepository.findByIdWithLock(stock_name).orElseGet(
+                () -> createBankStockWithQuantityZero(stock_name)
+        );
+        increaseStockByOne(bankStock);
+        bankRepository.save(bankStock);
+    }
 
-        if (bankStockOptional.isPresent()) {
-            BankStock bankStock = bankStockOptional.get();
-            bankStock.setQuantity(bankStock.getQuantity() + 1);
-            bankRepository.save(bankStock);
-        } else {
-            BankStock bankStock = createBankStock(stock_name, 1);
-            bankRepository.save(bankStock);
-        }
+    private BankStock createBankStockWithQuantityZero(String stock_name) {
+        return createBankStock(stock_name, 0);
     }
 
     private BankStock createBankStock(String stock_name, int quantity) {
@@ -68,6 +66,10 @@ public class BankManager implements BankExternalAPI, BankInternalAPI {
         bankStock.setName(stock_name);
         bankStock.setQuantity(quantity);
         return bankStock;
+    }
+
+    private void increaseStockByOne(BankStock bankStock) {
+        bankStock.setQuantity(bankStock.getQuantity() + 1);
     }
 
     @Override
@@ -79,7 +81,11 @@ public class BankManager implements BankExternalAPI, BankInternalAPI {
         if (bankStock.getQuantity() == 0) {
             throw new BankStockQuantityIsZeroException(stock_name);
         }
-        bankStock.setQuantity(bankStock.getQuantity() - 1);
+        decreaseStockByOne(bankStock);
         bankRepository.save(bankStock);
+    }
+
+    private void decreaseStockByOne(BankStock bankStock) {
+        bankStock.setQuantity(bankStock.getQuantity() - 1);
     }
 }
