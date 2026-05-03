@@ -1,0 +1,71 @@
+package com.github.gaskapiotr.stockmarketsim.gateway;
+
+import com.github.gaskapiotr.stockmarketsim.bank.BankExternalAPI;
+import com.github.gaskapiotr.stockmarketsim.bank.StocksDTO;
+import com.github.gaskapiotr.stockmarketsim.gateway.request.TradeRequest;
+import com.github.gaskapiotr.stockmarketsim.gateway.request.TradeType;
+import com.github.gaskapiotr.stockmarketsim.log.LogExternalAPI;
+import com.github.gaskapiotr.stockmarketsim.log.LogsDTO;
+import com.github.gaskapiotr.stockmarketsim.transaction.TransactionExternalAPI;
+import com.github.gaskapiotr.stockmarketsim.wallet.WalletDTO;
+import com.github.gaskapiotr.stockmarketsim.wallet.WalletExternalAPI;
+import com.github.gaskapiotr.stockmarketsim.wallet.WalletStockDTO;
+import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.*;
+
+@RestController
+@RequiredArgsConstructor
+public class GatewayManager {
+    private final BankExternalAPI bankExternalAPI;
+    private final WalletExternalAPI walletExternalAPI;
+    private final TransactionExternalAPI transactionExternalAPI;
+    private final LogExternalAPI logExternalAPI;
+
+    @PostMapping("/wallets/{wallet_id}/stocks/{stock_name}")
+    public void tradeStock(
+            @PathVariable String wallet_id,
+            @PathVariable String stock_name,
+            @RequestBody TradeRequest tradeRequest) {
+        if (tradeRequest.type() == TradeType.BUY) {
+            transactionExternalAPI.buyStock(wallet_id, stock_name);
+        } else if (tradeRequest.type() == TradeType.SELL) {
+            transactionExternalAPI.sellStock(wallet_id, stock_name);
+        }
+    }
+
+    @GetMapping("/wallets/{wallet_id}")
+    public WalletDTO getWallet(@PathVariable String wallet_id) {
+        return walletExternalAPI.getWallet(wallet_id);
+    }
+
+    @GetMapping("/wallets/{wallet_id}/stocks/{stock_name}")
+    public int getWalletStockQuantity(@PathVariable String wallet_id,
+                                         @PathVariable String stock_name) {
+        return walletExternalAPI.getWalletStockQuantity(wallet_id, stock_name);
+    }
+
+    @GetMapping("/stocks")
+    public StocksDTO getAllStocks() {
+        return bankExternalAPI.getAllStocks();
+    }
+
+    @PostMapping("/stocks")
+    public void setStocks(@RequestBody StocksDTO stocks) {
+        bankExternalAPI.setStocks(stocks);
+    }
+
+    @GetMapping("/log")
+    public LogsDTO getLogs() {
+        return logExternalAPI.getLogs();
+    }
+
+    @PostMapping("/chaos")
+    public void kill() {
+        new Thread(() -> {
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException ignored) {}
+            System.exit(0);
+        }).start();
+    }
+}
